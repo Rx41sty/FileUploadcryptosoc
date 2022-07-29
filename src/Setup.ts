@@ -1,6 +1,6 @@
 import express from 'express';
 import {createContainer, asClass, InjectionMode} from 'awilix';
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 
 
 const app = express();
@@ -16,26 +16,29 @@ container.register({
 });
 
 
-function fileFilter (req, file, cb) {
-  console.log("inside filter");
-console.log(file);
-
-  // // To reject this file pass `false`, like so:
-  // cb(null, false)
-
-  // // To accept the file pass `true`, like so:
-  // cb(null, true)
-
-  // // You can always pass an error if something goes wrong:
-  // cb(new Error('I don\'t have a clue!'))
-
+function fileFilter(
+  request: Express.Request,
+  file: Express.Multer.File,
+  callback: FileFilterCallback
+) {
+  console.log("from filters");
+  console.log(file);
+  if (
+      file.mimetype === 'image/png' ||
+      file.mimetype === 'image/jpg' ||
+      file.mimetype === 'image/jpeg'
+  ) {
+      callback(null, true);
+  } else {
+      callback(null, false);
+  }
 }
 
-const storage = multer.memoryStorage()
+const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 1000000000, files: 1},
+  limits: { fileSize: 10000000, files: 1},
 });
 
 app.get('/', (req, res) => {
