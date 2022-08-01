@@ -1,10 +1,8 @@
 import express from 'express';
 import {createContainer, asClass, InjectionMode} from 'awilix';
-import multer from 'multer';
 import VerifyController from './Controller/Verify.js';
 import UploadController from './Controller/Upload.js';
 import S3Service from './Service/S3.js';
-
 
 const app = express();
 app.use(express.json());
@@ -19,23 +17,15 @@ container.register({
   UploadController: asClass(UploadController),
   VerifyController: asClass(VerifyController)
 });
+let upload = container.resolve('UploadController');
 let verify = container.resolve('VerifyController');
-
-
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage,
-  fileFilter:verify.fileFilter,
-  limits: { fileSize: 10000000, files: 1},
-});
 
 app.get('/', (req, res) => {
   res.send("Hello");
 });
 
-app.post('/upload', upload.array("file"), (req, res) => {
-  console.log("from uploads");
-  console.log(req.files);
+app.post('/upload', verify.getMulter().single("file"), (req, res) => {
+  upload.uploadImages(req, res);
   res.send("Hello");
 });
 

@@ -1,5 +1,6 @@
 export class CustomError extends Error{
     private errorMap = new Map([
+        [ErrorNM.FileNotUploaded, "Please Upload a file"],
         [ErrorNM.Unknown, "Unknown error"]
     ]);
     constructor(private readonly errorCode: number) {
@@ -16,5 +17,6 @@ export class CustomError extends Error{
 }
 
 export enum ErrorNM{
+    FileNotUploaded,
     Unknown
 }
