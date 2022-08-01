@@ -1,6 +1,9 @@
 import express from 'express';
 import {createContainer, asClass, InjectionMode} from 'awilix';
-import multer, { FileFilterCallback } from 'multer';
+import multer from 'multer';
+import VerifyController from './Controller/Verify.js';
+import UploadController from './Controller/Upload.js';
+import S3Service from './Service/S3.js';
 
 
 const app = express();
@@ -8,36 +11,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const container = createContainer({
-  
+  injectionMode: InjectionMode.CLASSIC
 });
 
 container.register({
-
+  S3Service: asClass(S3Service),
+  UploadController: asClass(UploadController),
+  VerifyController: asClass(VerifyController)
 });
+let verify = container.resolve('VerifyController');
 
-
-function fileFilter(
-  request: Express.Request,
-  file: Express.Multer.File,
-  callback: FileFilterCallback
-) {
-  console.log("from filters");
-  console.log(file);
-  if (
-      file.mimetype === 'image/png' ||
-      file.mimetype === 'image/jpg' ||
-      file.mimetype === 'image/jpeg'
-  ) {
-      callback(null, true);
-  } else {
-      callback(null, false);
-  }
-}
 
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  fileFilter,
+  fileFilter:verify.fileFilter,
   limits: { fileSize: 10000000, files: 1},
 });
 

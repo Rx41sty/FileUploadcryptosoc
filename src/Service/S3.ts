@@ -1,12 +1,12 @@
-import {S3} from 'aws-sdk';
+import AWS from 'aws-sdk';
 import {CustomError, ErrorNM} from '../Error.js';
 import Base from './Base.js';
 
 export default class S3Service extends Base{
-    private s3service:S3;
+    private s3service:AWS.S3;
     constructor(){
         super();
-        this.s3service = new S3();
+        this.s3service = new AWS.S3();
     }
 
     // public async uploadImage(){
