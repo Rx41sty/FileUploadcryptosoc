@@ -13,7 +13,7 @@ export default class VerifyController extends BaseController{
             limits: { fileSize: 10000000, files: 1},
           });
     }
-    public fileFilter = (request: Express.Request, file: Express.Multer.File,callback: FileFilterCallback) => {
+    public fileFilter = (request: Express.Request, file: Express.Multer.File, callback: FileFilterCallback) => {
         if (file.mimetype === 'image/png' ||
             file.mimetype === 'image/jpg' ||
             file.mimetype === 'image/jpeg') {

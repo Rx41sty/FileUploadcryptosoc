@@ -21,9 +21,8 @@ export default class UploadController extends BaseController{
             let newName = this.generateName(req.file.originalname);
             await this.s3.uploadImage(newName, req.file.buffer);
             this.handleResponse(res);
-            }
-        catch(error:any){
-            this.handleException(res, error)
+        }catch(err:any){
+            this.handleException(res, err)
         }
     }
 

@@ -24,7 +24,6 @@ let verify = container.resolve('VerifyController');
 
 app.post('/upload', verify.getMulter().single("file"), (req, res) => {
   upload.uploadImages(req, res);
-  res.send("Hello");
 });
 
 export default app;
