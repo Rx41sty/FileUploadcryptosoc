@@ -1,8 +1,10 @@
 import {Request, Response} from 'express';
 import { nanoid } from 'nanoid'
+
 import BaseController from './Base.js';
 import S3Service from '../Service/S3.js';
 import { CustomError, ErrorNM } from '../Error.js';
+
 export default class UploadController extends BaseController{
     private s3:S3Service;
     constructor(S3Service:S3Service){
@@ -18,6 +20,7 @@ export default class UploadController extends BaseController{
         try{
             let newName = this.generateName(req.file.originalname);
             await this.s3.uploadImage(newName, req.file.buffer);
+            this.handleResponse(res);
             }
         catch(error:any){
             this.handleException(res, error)
@@ -25,6 +28,6 @@ export default class UploadController extends BaseController{
     }
 
     private generateName(currentName:string):string{
-        return currentName + nanoid();
+        return nanoid() + currentName;
     }
 }

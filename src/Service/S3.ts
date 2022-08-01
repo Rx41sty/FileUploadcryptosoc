@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import {CustomError, ErrorNM} from '../Error.js';
 import Base from './Base.js';
 
 export default class S3Service extends Base{
@@ -12,14 +11,14 @@ export default class S3Service extends Base{
     public async uploadImage(name:string, content:Buffer){
         const params = {
             Bucket: process.env.AWS_S3_IMAGES_BUCKET_ID!,
-            Key: name,
+            Key: 'uploads/'+name,
             Body: content
           };
 
         try{
-            let res = await this.s3service.upload(params).promise();
+            await this.s3service.upload(params).promise();
         } catch(error:any) {
-            console.log("Error -> " + error);
+            this.handleUnkownException(error);
         }
     }
 }
