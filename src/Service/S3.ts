@@ -16,7 +16,8 @@ export default class S3Service extends Base{
           };
 
         try{
-            await this.s3service.upload(params).promise();
+            let result = await this.s3service.upload(params).promise();
+            console.log(result);
         } catch(error:any) {
             this.handleUnkownException(error);
         }

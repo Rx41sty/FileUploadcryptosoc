@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 import BaseController from './Base.js';
 import S3Service from '../Service/S3.js';
